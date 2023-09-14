@@ -13,7 +13,8 @@ build {
   provisioner "shell" {
     inline = [
       "apt update -y",
-      "apt dist-upgrade -y"
+      "apt dist-upgrade -y",
+      "apt install -y socat conntrack",
     ]
   }
 
@@ -28,16 +29,19 @@ build {
     }
   }
 
-  provisioner "shell" {
-    script = "services.sh"
-  }
-
   provisioner "file" {
     content = <<EOT
 overlay
 br_netfilter
 EOT
     destination = "/etc/modules-load.d/k8s.conf"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "modprobe overlay",
+      "modprobe br_netfilter",
+    ]
   }
 
   provisioner "file" {
@@ -48,6 +52,22 @@ net.ipv4.ip_forward = 1
 net.ipv6.conf.all.forwarding = 1
 EOT
     destination = "/etc/sysctl.d/k8s.conf"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "sysctl --system",
+    ]
+  }
+
+  provisioner "shell" {
+    script = "services.sh"
+  }
+
+  provisioner "shell" {
+    inline = [
+      "kubeadm config images pull --kubernetes-version ${var.kubernetes_version}",
+    ]
   }
 
   provisioner "shell" {

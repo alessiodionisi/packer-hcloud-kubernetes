@@ -5,7 +5,7 @@ set -e
 ARCH=amd64
 if [ "$(uname -m)" = "aarch64" ]; then ARCH=arm64; fi
 
-# install containerd
+# containerd
 curl -OL https://github.com/containerd/containerd/releases/download/v$CONTAINERD_VERSION/containerd-$CONTAINERD_VERSION-linux-$ARCH.tar.gz
 curl -OL https://github.com/containerd/containerd/releases/download/v$CONTAINERD_VERSION/containerd-$CONTAINERD_VERSION-linux-$ARCH.tar.gz.sha256sum
 sha256sum -c containerd-$CONTAINERD_VERSION-linux-$ARCH.tar.gz.sha256sum

@@ -21,7 +21,7 @@ variable "server_type" {
 
 variable "containerd_version" {
   type      = string
-  default   = "1.7.5"
+  default   = "1.7.6"
 }
 
 variable "runc_version" {
