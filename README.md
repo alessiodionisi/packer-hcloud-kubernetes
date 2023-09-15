@@ -2,6 +2,8 @@
 
 This [Packer](https://www.packer.io) project creates an image to spin up [Kubernetes](https://kubernetes.io) clusters with [kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm) or [Kubernetes Cluster API](https://cluster-api.sigs.k8s.io) on [Hetzner Cloud](https://www.hetzner.com/cloud).
 
+The image uses [containerd](https://containerd.io) as container runtime and comes with all requirements to setup a Kubernetes cluster with kubeadm, it's also configured to support IPv4/IPv6 dual-stack networking.
+
 ## Getting started
 
 Set `HCLOUD_TOKEN` environment variable or `token` variable and run `packer build`, for example:
