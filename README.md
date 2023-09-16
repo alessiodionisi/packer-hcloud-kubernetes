@@ -6,6 +6,7 @@ This [Packer](https://www.packer.io) project creates an image to spin up [Kubern
 
 - All requirements to setup a Kubernetes cluster with `kubeadm`
 - [containerd](https://containerd.io) as container runtime
+- AMD64 and ARM64 support
 - IPv4/IPv6 dual-stack networking support
 - Integrity of downloaded files verified with `sha256sum`
 - Images used by `kubeadm` pulled as building step
