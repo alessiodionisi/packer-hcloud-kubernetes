@@ -25,6 +25,11 @@ variable "containerd_version" {
   default   = "1.7.6"
 }
 
+variable "containerd_sandbox_image" {
+  type = string
+  default = "registry.k8s.io/pause:3.9"
+}
+
 // https://github.com/opencontainers/runc/releases
 variable "runc_version" {
   type      = string

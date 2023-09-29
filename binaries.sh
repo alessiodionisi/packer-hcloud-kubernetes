@@ -13,8 +13,8 @@ tar --no-overwrite-dir -C /usr/local -xzf containerd-$CONTAINERD_VERSION-linux-$
 rm -f containerd-$CONTAINERD_VERSION-linux-$ARCH.tar.gz containerd-$CONTAINERD_VERSION-linux-$ARCH.tar.gz.sha256sum
 mkdir -p /etc/containerd
 containerd config default > /etc/containerd/config.toml
-sed -i "s:SystemdCgroup = false:SystemdCgroup = true:g" /etc/containerd/config.toml
-# sed -i "s#registry.k8s.io/pause:3.8#registry.k8s.io/pause:3.9#g" /etc/containerd/config.toml
+sed -i "s/SystemdCgroup = false/SystemdCgroup = true/" /etc/containerd/config.toml
+sed -i "s#sandbox_image = \"[^\"]*#sandbox_image = \"$CONTAINERD_SANDBOX_IMAGE#" /etc/containerd/config.toml
 
 # runc
 curl -OL https://github.com/opencontainers/runc/releases/download/v$RUNC_VERSION/runc.$ARCH

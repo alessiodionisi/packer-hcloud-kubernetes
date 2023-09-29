@@ -28,11 +28,12 @@ build {
   provisioner "shell" {
     script = "binaries.sh"
     env = {
-      CONTAINERD_VERSION = var.containerd_version
-      RUNC_VERSION = var.runc_version
       CNI_PLUGINS_VERSION = var.cni_plugins_version
+      CONTAINERD_SANDBOX_IMAGE = var.containerd_sandbox_image
+      CONTAINERD_VERSION = var.containerd_version
       CRICTL_VERSION = var.crictl_version
       KUBERNETES_VERSION = var.kubernetes_version
+      RUNC_VERSION = var.runc_version
     }
   }
 
