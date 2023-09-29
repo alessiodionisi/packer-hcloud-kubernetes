@@ -19,27 +19,38 @@ variable "server_type" {
   default = "cax11"
 }
 
+// https://github.com/containerd/containerd/releases
 variable "containerd_version" {
   type      = string
   default   = "1.7.6"
 }
 
+// https://github.com/opencontainers/runc/releases
 variable "runc_version" {
   type      = string
   default   = "1.1.9"
 }
 
+// https://github.com/containernetworking/plugins/releases
 variable "cni_plugins_version" {
   type      = string
   default   = "1.3.0"
 }
 
+// https://github.com/kubernetes-sigs/cri-tools/releases
 variable "crictl_version" {
   type      = string
   default   = "1.28.0"
 }
 
+// https://github.com/kubernetes/kubernetes/releases
 variable "kubernetes_version" {
   type      = string
-  default   = "1.28.1"
+  default   = "1.28.2"
+}
+
+// https://github.com/kubernetes/release/releases
+variable "kubernetes_release_tooling_version" {
+  type      = string
+  default   = "0.15.1"
 }

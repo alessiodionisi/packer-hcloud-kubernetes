@@ -1,8 +1,15 @@
+locals {
+  image_name = "kubernetes-${var.kubernetes_version}-${var.image}-%{ if substr(var.server_type, 0, 3) == "cax" }arm64%{ else }amd64%{ endif }-{{ timestamp }}"
+}
+
 source "hcloud" "source" {
   image = var.image
   location = var.location
   server_type = var.server_type
-  snapshot_name = "kubernetes-${var.kubernetes_version}-${var.image}-%{ if substr(var.server_type, 0, 3) == "cax" }arm64%{ else }amd64%{ endif }-{{ timestamp }}"
+  snapshot_name = local.image_name
+  snapshot_labels = {
+    caph-image-name = local.image_name
+  }
   ssh_username  = "root"
   token = var.token
 }
@@ -62,6 +69,10 @@ EOT
 
   provisioner "shell" {
     script = "services.sh"
+    env = {
+      CONTAINERD_VERSION = var.containerd_version
+      KUBERNETES_RELEASE_TOOLING_VERSION = var.kubernetes_release_tooling_version
+    }
   }
 
   provisioner "shell" {
