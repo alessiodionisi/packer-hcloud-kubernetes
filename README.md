@@ -22,14 +22,15 @@ packer build .
 
 ## Variables
 
-| Name                  | Description                        | Default                             |
-| --------------------- | ---------------------------------- | ----------------------------------- |
-| `token`               | Hetzner Cloud token to access APIs | `HCLOUD_TOKEN` environment variable |
-| `location`            | Hetzner Cloud location             | `fsn1`                              |
-| `image`               | Hetzner Cloud base image           | `debian-12`                         |
-| `server_type`         | Hetzner Cloud server type          | `cax11`                             |
-| `containerd_version`  | containerd version                 | `1.7.6`                             |
-| `runc_version`        | runc version                       | `1.1.9`                             |
-| `cni_plugins_version` | cni plugins version                | `1.3.0`                             |
-| `crictl_version`      | crictl version                     | `1.28.0`                            |
-| `kubernetes_version`  | kubernetes version                 | `1.28.1`                            |
+| Name                                 | Description                        | Default                             |
+| ------------------------------------ | ---------------------------------- | ----------------------------------- |
+| `cni_plugins_version`                | cni plugins version                | `1.3.0`                             |
+| `containerd_version`                 | containerd version                 | `1.7.6`                             |
+| `crictl_version`                     | crictl version                     | `1.28.0`                            |
+| `image`                              | Hetzner Cloud base image           | `debian-12`                         |
+| `kubernetes_release_tooling_version` | kubernetes release tooling version | `0.15.1`                            |
+| `kubernetes_version`                 | kubernetes version                 | `1.28.2`                            |
+| `location`                           | Hetzner Cloud location             | `fsn1`                              |
+| `runc_version`                       | runc version                       | `1.1.9`                             |
+| `server_type`                        | Hetzner Cloud server type          | `cax11`                             |
+| `token`                              | Hetzner Cloud token to access APIs | `HCLOUD_TOKEN` environment variable |
