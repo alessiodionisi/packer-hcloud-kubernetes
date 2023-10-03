@@ -1,0 +1,343 @@
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: ClusterClass
+metadata:
+  name: hcloud
+spec:
+  controlPlane:
+    ref:
+      apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+      kind: KubeadmControlPlaneTemplate
+      name: hcloud
+    machineInfrastructure:
+      ref:
+        kind: HCloudMachineTemplate
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+        name: hcloud
+  infrastructure:
+    ref:
+      apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+      kind: HetznerClusterTemplate
+      name: hcloud
+  workers:
+    machineDeployments:
+      - class: worker
+        template:
+          bootstrap:
+            ref:
+              apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+              kind: KubeadmConfigTemplate
+              name: hcloud
+          infrastructure:
+            ref:
+              apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+              kind: HCloudMachineTemplate
+              name: hcloud
+  variables:
+    - name: controlPlaneEndpointHost
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+          default: ""
+    - name: controlPlaneEndpointPort
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: integer
+          default: 443
+    - name: controlPlaneLoadBalancerEnabled
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: boolean
+          default: true
+    - name: controlPlaneLoadBalancerRegion
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+          default: nbg1
+    - name: controlPlaneLoadBalancerType
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+          default: lb11
+    - name: controlPlaneType
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+          default: cpx11
+    - name: controlPlaneImageName
+      required: true
+      schema:
+        openAPIV3Schema:
+          type: string
+    - name: controlPlanePlacementGroup
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+    - name: controlPlaneSkipPhases
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: array
+          items:
+            type: string
+    - name: controlPlaneRegions
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: array
+          default: [nbg1]
+          items:
+            type: string
+    - name: controlPlaneTaints
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: array
+          default: []
+          items:
+            type: object
+            required: [effect, key]
+            properties:
+              effect:
+                type: string
+              key:
+                type: string
+              timeAdded:
+                type: string
+              value:
+                type: string
+    - name: placementGroups
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: array
+          items:
+            type: object
+            required: [name, type]
+            properties:
+              name:
+                type: string
+              type:
+                type: string
+    - name: workerType
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+          default: cpx11
+    - name: workerPlacementGroup
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: string
+    - name: workerImageName
+      required: true
+      schema:
+        openAPIV3Schema:
+          type: string
+    - name: workerTaints
+      required: false
+      schema:
+        openAPIV3Schema:
+          type: array
+          default: []
+          items:
+            type: object
+            required: [effect, key]
+            properties:
+              effect:
+                type: string
+              key:
+                type: string
+              timeAdded:
+                type: string
+              value:
+                type: string
+  patches:
+    - name: HetznerClusterTemplate
+      definitions:
+        - selector:
+            apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+            kind: HetznerClusterTemplate
+            matchResources:
+              infrastructureCluster: true
+          jsonPatches:
+            - op: add
+              path: /spec/template/spec/hcloudPlacementGroups
+              valueFrom:
+                variable: placementGroups
+            - op: add
+              path: /spec/template/spec/controlPlaneLoadBalancer/enabled
+              valueFrom:
+                variable: controlPlaneLoadBalancerEnabled
+            - op: add
+              path: /spec/template/spec/controlPlaneLoadBalancer/region
+              valueFrom:
+                variable: controlPlaneLoadBalancerRegion
+            - op: add
+              path: /spec/template/spec/controlPlaneLoadBalancer/type
+              valueFrom:
+                variable: controlPlaneLoadBalancerType
+            - op: add
+              path: /spec/template/spec/controlPlaneEndpoint/host
+              valueFrom:
+                variable: controlPlaneEndpointHost
+            - op: add
+              path: /spec/template/spec/controlPlaneEndpoint/port
+              valueFrom:
+                variable: controlPlaneEndpointPort
+            - op: add
+              path: /spec/template/spec/controlPlaneRegions
+              valueFrom:
+                variable: controlPlaneRegions
+    - name: HCloudMachineTemplateWorker
+      definitions:
+        - selector:
+            apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+            kind: HCloudMachineTemplate
+            matchResources:
+              machineDeploymentClass:
+                names:
+                  - worker
+          jsonPatches:
+            - op: add
+              path: /spec/template/spec/type
+              valueFrom:
+                variable: workerType
+            - op: add
+              path: /spec/template/spec/placementGroupName
+              valueFrom:
+                variable: workerPlacementGroup
+            - op: add
+              path: /spec/template/spec/imageName
+              valueFrom:
+                variable: workerImageName
+    - name: HCloudMachineTemplateControlPlane
+      definitions:
+        - selector:
+            apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+            kind: HCloudMachineTemplate
+            matchResources:
+              controlPlane: true
+          jsonPatches:
+            - op: add
+              path: "/spec/template/spec/type"
+              valueFrom:
+                variable: controlPlaneType
+            - op: add
+              path: "/spec/template/spec/placementGroupName"
+              valueFrom:
+                variable: controlPlanePlacementGroup
+            - op: add
+              path: "/spec/template/spec/imageName"
+              valueFrom:
+                variable: controlPlaneImageName
+    - name: KubeadmConfigTemplate
+      definitions:
+        - selector:
+            apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+            kind: KubeadmConfigTemplate
+            matchResources:
+              machineDeploymentClass:
+                names:
+                  - worker
+          jsonPatches:
+            - op: add
+              path: /spec/template/spec/joinConfiguration/nodeRegistration/taints
+              valueFrom:
+                variable: workerTaints
+    - name: KubeadmControlPlaneTemplate
+      definitions:
+        - selector:
+            apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+            kind: KubeadmControlPlaneTemplate
+            matchResources:
+              controlPlane: true
+          jsonPatches:
+            - op: add
+              path: /spec/template/spec/kubeadmConfigSpec/joinConfiguration/nodeRegistration/taints
+              valueFrom:
+                variable: controlPlaneTaints
+            - op: add
+              path: /spec/template/spec/kubeadmConfigSpec/initConfiguration/nodeRegistration/taints
+              valueFrom:
+                variable: controlPlaneTaints
+            - op: add
+              path: /spec/template/spec/kubeadmConfigSpec/initConfiguration/skipPhases
+              valueFrom:
+                variable: controlPlaneSkipPhases
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: HetznerClusterTemplate
+metadata:
+  name: hcloud
+spec:
+  template:
+    spec:
+      hcloudNetwork:
+        enabled: false
+      controlPlaneRegions:
+        - nbg1
+      controlPlaneEndpoint:
+        host: ""
+        port: 443
+      controlPlaneLoadBalancer:
+        enabled: false
+        region: nbg1
+        type: lb11
+      hetznerSecretRef:
+        name: hcloud
+        key:
+          hcloudToken: token
+      sshKeys:
+        hcloud: []
+      hcloudPlacementGroups: []
+---
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: KubeadmControlPlaneTemplate
+metadata:
+  name: hcloud
+spec:
+  template:
+    spec:
+      kubeadmConfigSpec:
+        initConfiguration:
+          nodeRegistration:
+            kubeletExtraArgs:
+              cloud-provider: external
+            taints: []
+          skipPhases: []
+        joinConfiguration:
+          nodeRegistration:
+            kubeletExtraArgs:
+              cloud-provider: external
+            taints: []
+---
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
+kind: HCloudMachineTemplate
+metadata:
+  name: hcloud
+spec:
+  template:
+    spec:
+      imageName: image-name
+      type: cpx11
+---
+apiVersion: bootstrap.cluster.x-k8s.io/v1beta1
+kind: KubeadmConfigTemplate
+metadata:
+  name: hcloud
+spec:
+  template:
+    spec:
+      joinConfiguration:
+        nodeRegistration:
+          kubeletExtraArgs:
+            cloud-provider: external
+          taints: []

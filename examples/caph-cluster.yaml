@@ -1,0 +1,55 @@
+apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: caph-cluster
+  namespace: default
+spec:
+  topology:
+    class: hcloud
+    version: v1.28.2
+    controlPlane:
+      replicas: 1
+    workers:
+      machineDeployments:
+        - name: md-0
+          class: worker
+          replicas: 1
+          failureDomain: hel1
+          variables:
+            overrides:
+              - name: workerType
+                value: cax11
+              - name: workerPlacementGroup
+                value: md-0
+        - name: md-1
+          class: worker
+          replicas: 1
+          failureDomain: hel1
+          variables:
+            overrides:
+              - name: workerType
+                value: cax11
+              - name: workerPlacementGroup
+                value: md-1
+    variables:
+      - name: placementGroups
+        value:
+          - name: control-plane
+            type: spread
+          - name: md-0
+            type: spread
+          - name: md-1
+            type: spread
+      - name: controlPlanePlacementGroup
+        value: control-plane
+      - name: controlPlaneImageName
+        value: kubernetes-1.28.2-debian-12-arm64-1695976053
+      - name: controlPlaneType
+        value: cax11
+      - name: controlPlaneLoadBalancerRegion
+        value: hel1
+      - name: controlPlaneRegions
+        value:
+          - hel1
+      - name: workerImageName
+        value: kubernetes-1.28.2-debian-12-arm64-1695976053
