@@ -6,7 +6,7 @@ variable "token" {
 
 variable "location" {
   type      = string
-  default = "fsn1"
+  default = "nbg1"
 }
 
 variable "image" {
@@ -16,7 +16,7 @@ variable "image" {
 
 variable "server_type" {
   type      = string
-  default = "cax11"
+  default = "cx11"
 }
 
 // https://github.com/containerd/containerd/releases

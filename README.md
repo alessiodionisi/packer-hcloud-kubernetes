@@ -20,6 +20,13 @@ export HCLOUD_TOKEN=xxxx
 packer build .
 ```
 
+To build an ARM64 image, set `server_type` variable to `cax11`:
+
+```shell
+export HCLOUD_TOKEN=xxxx
+packer build -var server_type=cax11 .
+```
+
 ## Variables
 
 | Name                                 | Description                                    | Default                             |
@@ -31,7 +38,7 @@ packer build .
 | `image`                              | Hetzner Cloud base image                       | `debian-12`                         |
 | `kubernetes_release_tooling_version` | kubernetes release tooling version             | `0.16.4`                            |
 | `kubernetes_version`                 | kubernetes version                             | `1.28.4`                            |
-| `location`                           | Hetzner Cloud location                         | `fsn1`                              |
+| `location`                           | Hetzner Cloud location                         | `nbg1`                              |
 | `runc_version`                       | runc version                                   | `1.1.10`                            |
-| `server_type`                        | Hetzner Cloud server type                      | `cax11`                             |
+| `server_type`                        | Hetzner Cloud server type                      | `cx11`                              |
 | `token`                              | Hetzner Cloud token to access APIs             | `HCLOUD_TOKEN` environment variable |
