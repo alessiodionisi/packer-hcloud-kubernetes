@@ -159,6 +159,17 @@ spec:
                 type: string
               value:
                 type: string
+    - name: sshKeys
+      required: true
+      schema:
+        openAPIV3Schema:
+          type: array
+          items:
+            type: object
+            required: [name]
+            properties:
+              name:
+                type: string
   patches:
     - name: HetznerClusterTemplate
       definitions:
@@ -196,6 +207,10 @@ spec:
               path: /spec/template/spec/controlPlaneRegions
               valueFrom:
                 variable: controlPlaneRegions
+            - op: add
+              path: /spec/template/spec/sshKeys/hcloud
+              valueFrom:
+                variable: sshKeys
     - name: HCloudMachineTemplateWorker
       definitions:
         - selector:
@@ -280,24 +295,16 @@ metadata:
 spec:
   template:
     spec:
-      hcloudNetwork:
-        enabled: false
-      controlPlaneRegions:
-        - nbg1
+      controlPlaneRegions: []
       controlPlaneEndpoint:
         host: ""
         port: 443
-      controlPlaneLoadBalancer:
-        enabled: false
-        region: nbg1
-        type: lb11
+      controlPlaneLoadBalancer: {}
       hetznerSecretRef:
         name: hcloud
         key:
           hcloudToken: token
-      sshKeys:
-        hcloud: []
-      hcloudPlacementGroups: []
+      sshKeys: {}
 ---
 apiVersion: controlplane.cluster.x-k8s.io/v1beta1
 kind: KubeadmControlPlaneTemplate
@@ -311,13 +318,10 @@ spec:
           nodeRegistration:
             kubeletExtraArgs:
               cloud-provider: external
-            taints: []
-          skipPhases: []
         joinConfiguration:
           nodeRegistration:
             kubeletExtraArgs:
               cloud-provider: external
-            taints: []
 ---
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: HCloudMachineTemplate
@@ -340,4 +344,3 @@ spec:
         nodeRegistration:
           kubeletExtraArgs:
             cloud-provider: external
-          taints: []

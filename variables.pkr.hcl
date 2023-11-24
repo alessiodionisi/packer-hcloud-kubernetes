@@ -22,7 +22,7 @@ variable "server_type" {
 // https://github.com/containerd/containerd/releases
 variable "containerd_version" {
   type      = string
-  default   = "1.7.6"
+  default   = "1.7.9"
 }
 
 variable "containerd_sandbox_image" {
@@ -33,7 +33,7 @@ variable "containerd_sandbox_image" {
 // https://github.com/opencontainers/runc/releases
 variable "runc_version" {
   type      = string
-  default   = "1.1.9"
+  default   = "1.1.10"
 }
 
 // https://github.com/containernetworking/plugins/releases
@@ -51,11 +51,11 @@ variable "crictl_version" {
 // https://github.com/kubernetes/kubernetes/releases
 variable "kubernetes_version" {
   type      = string
-  default   = "1.28.2"
+  default   = "1.28.4"
 }
 
 // https://github.com/kubernetes/release/releases
 variable "kubernetes_release_tooling_version" {
   type      = string
-  default   = "0.15.1"
+  default   = "0.16.4"
 }

@@ -6,7 +6,7 @@ metadata:
 spec:
   topology:
     class: hcloud
-    version: v1.28.2
+    version: v1.28.4
     controlPlane:
       replicas: 1
     workers:
@@ -43,13 +43,16 @@ spec:
       - name: controlPlanePlacementGroup
         value: control-plane
       - name: controlPlaneImageName
-        value: kubernetes-1.28.2-debian-12-arm64-1695976053
+        value: image-name
       - name: controlPlaneType
         value: cax11
       - name: controlPlaneLoadBalancerRegion
-        value: hel1
+        value: nbg1
       - name: controlPlaneRegions
         value:
-          - hel1
+          - nbg1
       - name: workerImageName
-        value: kubernetes-1.28.2-debian-12-arm64-1695976053
+        value: image-name
+      - name: sshKeys
+        value:
+          - ssh-key-name

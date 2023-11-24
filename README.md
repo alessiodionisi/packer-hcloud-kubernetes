@@ -26,12 +26,12 @@ packer build .
 | ------------------------------------ | ---------------------------------------------- | ----------------------------------- |
 | `cni_plugins_version`                | cni plugins version                            | `1.3.0`                             |
 | `containerd_sandbox_image`           | containerd sandbox image, should match k8s one | `registry.k8s.io/pause:3.9`         |
-| `containerd_version`                 | containerd version                             | `1.7.6`                             |
+| `containerd_version`                 | containerd version                             | `1.7.9`                             |
 | `crictl_version`                     | crictl version                                 | `1.28.0`                            |
 | `image`                              | Hetzner Cloud base image                       | `debian-12`                         |
-| `kubernetes_release_tooling_version` | kubernetes release tooling version             | `0.15.1`                            |
-| `kubernetes_version`                 | kubernetes version                             | `1.28.2`                            |
+| `kubernetes_release_tooling_version` | kubernetes release tooling version             | `0.16.4`                            |
+| `kubernetes_version`                 | kubernetes version                             | `1.28.4`                            |
 | `location`                           | Hetzner Cloud location                         | `fsn1`                              |
-| `runc_version`                       | runc version                                   | `1.1.9`                             |
+| `runc_version`                       | runc version                                   | `1.1.10`                            |
 | `server_type`                        | Hetzner Cloud server type                      | `cax11`                             |
 | `token`                              | Hetzner Cloud token to access APIs             | `HCLOUD_TOKEN` environment variable |
